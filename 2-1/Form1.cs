@@ -35,6 +35,8 @@ namespace _2_1
             Take.Visible = false;
             quit.Visible = false;
             this.Bigmoney += BigMoneyAppear;
+            label1.Text += mybank.Name;
+            ATMmoneychange();
         }
 
         private void button3_Click(object sender, EventArgs e)//登陆
@@ -92,18 +94,22 @@ namespace _2_1
                     }
                     catch (BadCashException a)
                     {
+                        ATMmoneychange();
+                        mybank.atms[0].Havemoney -= int.Parse(number.Text);
                         MessageBox.Show(a.Message);
+                       
                     }
                     listBox1.Items.Add("取了" + int.Parse(number.Text) + "元");
                     money.Text = mybank.GetList()[num].Money.ToString();
+                    ATMmoneychange();
                     if (int.Parse(number.Text) > 10000)
                     {
                         BigMoneyArgs args = new BigMoneyArgs(mybank.GetList()[num].ID, int.Parse(number.Text));
                         Bigmoney(this, args);
                     }
-                }
-               
+                }              
             }
+            ATMmoneychange();
         }
 
         private void button4_Click(object sender, EventArgs e)//存钱
@@ -123,6 +129,7 @@ namespace _2_1
                 listBox1.Items.Add("存了"+ int.Parse(number.Text)+"元");
                 money.Text = mybank.GetList()[num].Money.ToString();
             }
+            ATMmoneychange();
         }
 
         static void BigMoneyAppear(object sender,BigMoneyArgs e)
@@ -136,6 +143,16 @@ namespace _2_1
             pass.Enabled = true;
             quit.Visible = false;
             button3.Visible = true;//允许登陆
+        }
+
+        private void ATMmoneychange()
+        {
+            label7.Text = "ATM机金额：" + mybank.atms[0].Havemoney;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
